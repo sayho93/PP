@@ -1,3 +1,9 @@
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
 import java.io.IOException;
 
 /**
@@ -5,7 +11,7 @@ import java.io.IOException;
  */
 public class main {
     public static void main(String[] args) throws IOException {
-        Parser parser=new Parser("http://spp.seoul.go.kr/main/news/news_tender.jsp");
+        Parser parser=new Parser("http://www.gdc.or.kr/bidding");
         parser.findLocation();
     }
 }

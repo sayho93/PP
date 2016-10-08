@@ -15,7 +15,80 @@ public class Parser {
     private String URL="";
     private String name="";
     private Document document;
-    private static String COMPAREDATA="업무공고번호공고명공고기관계약방법입찰방법입찰서마감일시번호제목내용담당부서등록일조회수구분첨부작성일작성자조회등록일입찰일시추정가격기간";
+    private static String COMPAREDATA=
+            "업무공고\n" +
+                    "번호\n" +
+                    "공고명\n" +
+                    "공고기관\n" +
+                    "계약방법\n" +
+                    "입찰방법\n" +
+                    "입찰서\n" +
+                    "마감일시\n" +
+                    "번호\n" +
+                    "제목\n" +
+                    "내용\n" +
+                    "담당부서\n" +
+                    "등록일\n" +
+                    "조회수\n" +
+                    "구분\n" +
+                    "첨부\n" +
+                    "작성일\n" +
+                    "작성자\n" +
+                    "조회\n" +
+                    "등록일\n" +
+                    "추정가격\n" +
+                    "기간\n" +
+                    "입찰일시\n" +
+                    "입찰기관\n" +
+                    "입찰건명\n" +
+                    "링크\n" +
+                    "입찰일\n" +
+                    "첨부파일\n" +
+                    "No.\n" +
+                    "업무\n" +
+                    "공고번호-차수\n" +
+                    "공고기관\n" +
+                    "계약방법\n" +
+                    "입찰서\n마감일시\n" +
+                    "입찰방법\n" +
+                    "발주처명\n" +
+                    "현장설명\n" +
+                    "등록기한\n" +
+                    "입찰일자\n" +
+                    "결과\n"+
+                    "게시일자\n" +
+                    "등록일자\n" +
+                    "NO.\n" +
+                    "입찰건명   입찰일   \n" +
+                    "분류\n" +
+                    "이름\n" +
+                    "날짜\n"+
+                    "분야\n" +
+                    "입찰명\n" +
+                    "계약부서\n" +
+                    "사업부서\n"+
+                    "전체\n"+
+                    "게시일자\n"+
+                    "입찰공고번호\n"+
+                    "개찰일자\n"+
+                    "발주기관\n"+
+                    "조달방식\n"+
+                    "유형\n"+
+                    "공사명\n"+
+                    "게시일시\n"+
+                    "발주시기\n"+
+                    "등록자\n"+
+                    "고시공고번호\n" +
+                    "관서명\n"+
+                    "계약명\n"+
+                    "계약금액\n"+
+                    "계약일\n"+
+                    "계약대상자\n"+
+                    "글번호\n"+
+                    "입찰번호\n"+
+                    "입찰정보\n"+
+                    "사업명\n"+
+                    "부서명\n";
     public static final int CODE_NOTYET=2, CODE_CANNOT_FIND=1, CODE_SUCCESS=0;
     private static final int TIMEOUT=10000;
     private int tableIndex=-1;
@@ -31,11 +104,21 @@ public class Parser {
     public String getName() { return name; }        //홈페이지 이름
 
     public List<String> category=new ArrayList();
-    public List<List<String>> article=new ArrayList();  //반복 나중에
+    public List<List<String>> article=new ArrayList();
 
 
     private boolean isArticleTable(String msg){
-        if(COMPAREDATA.contains(msg)) return true;
+        if(COMPAREDATA.replaceAll(" ", "").contains(msg.replaceAll(" ", "")+"\n")) return true;
+        return false;
+    }
+
+    private boolean isPlace(String msg){
+        if(msg.replaceAll(" ", "").contains("경상북도")) return true;
+        return false;
+    }
+
+    private boolean isSearchTable(String msg){
+        if(msg.replaceAll(" ", "").contains("검색")) return true;
         return false;
     }
 
@@ -55,20 +138,50 @@ public class Parser {
                 ++tableIndex;
                 //Element trTags=elem.select("tr").first();
                 for(Element trTags:elem.select("tr")) {
+                    ArrayList<String> temp = new ArrayList<>();
+                    article.add(temp);
                     if (trTags == null) {                           //when whole line is empty
                         System.out.println("<tr> doesn't exist");
                         resultCode = CODE_CANNOT_FIND;
                         return;
                     }
-                    for (Element td : trTags.select("td, th")) {
-                        if (isArticleTable(td.text())) {
+                    for (Element th : trTags.select("th")) {
+                        if (isArticleTable(th.text()) && !isPlace(th.text())) {
                             resultCode = CODE_SUCCESS;
                             //ParseAndInsert(resultCode);            //tableIndex?
-                            System.out.println("resultCode: " + resultCode);
-                            System.out.println("tableIndex: " + tableIndex);
+                            //System.out.println("resultCode: " + resultCode);
+                            //System.out.println("tableIndex: " + tableIndex);
                             if (trTags.text().trim().length() != 0)
-                                System.out.println(trTags.text() + " :: " + trTags.select("a").attr("href"));
+                                //System.out.println(trTags.text() + " :: " + trTags.select("a").attr("href"));
+                                category.add(th.text());
+
                             //return;
+                        }
+                    }
+                    int i=0;
+                    for(Element td : trTags.select("td, th")){
+                        if(!isArticleTable(td.text()) && !isPlace(td.text())){
+                            //temp.add(td.text());
+                            String tdTemp = td.text();
+                            String aTemp = td.select("a").text();
+
+                            if ((tdTemp.contains(aTemp) || aTemp.contains(tdTemp)) && aTemp.length()!=0) {
+                                if(tdTemp=="") continue;
+                                temp.add(aTemp);
+                                System.out.println("1111111111");
+                            } else {
+                                if(tdTemp.length() == 0) temp.add(aTemp);
+                                if(aTemp.length() == 0) temp.add(tdTemp);
+                                //temp.add(tdTemp);
+                            }
+                            System.out.println("tdTemp:" + tdTemp +"length" +tdTemp.length());
+                            System.out.println("aTemp:" + aTemp + "length"+aTemp.length());
+                            //System.out.println(temp.get(i++));
+                            tdTemp="";
+                            aTemp="";
+                            for(int j=0;j<i;j++){
+                                System.out.println(temp.get(j));
+                            }
                         }
                     }
                 }
@@ -79,6 +192,7 @@ public class Parser {
             resultCode=CODE_CANNOT_FIND;
             return;
         }
+        printList();
     }
 
     private void ParseAndInsert(int ColumnCount){
@@ -91,5 +205,34 @@ public class Parser {
     private void setColumnCount(int ColumnCount){
 
     }
+
+    private void printList(){
+        System.out.println("category table");
+        for( String node:category){
+            System.out.print(node + " ");
+        }
+        System.out.println(" ");
+        System.out.println("articletable");
+        for(List<String> arr : article)
+        {
+            for(String s : arr)
+            {
+                System.out.print(s + " ");
+            }
+            System.out.println("");
+        }
+        /*
+        System.out.println(category.get(0));
+        System.out.println(category.get(1));
+        System.out.println(category.get(2));
+        System.out.println(category.get(3));
+        System.out.println(category.get(4));
+        System.out.println(article.get(2).get(0));
+        System.out.println(article.get(2).get(1));
+        System.out.println(article.get(2).get(2));
+        System.out.println(article.get(2).get(3));
+        */
+    }
+
 }
 
