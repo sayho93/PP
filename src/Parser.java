@@ -15,6 +15,7 @@ public class Parser {
     private String URL="";
     private String name="";
     private Document document;
+    private int articleCount=0;
     private static String COMPAREDATA=
             "업무공고\n" + "번호\n" + "공고명\n" + "공고기관\n" + "계약방법\n" + "입찰방법\n" +
                     "입찰서\n" + "마감일시\n" + "번호\n" + "제목\n" + "내용\n" + "담당부서\n" +
@@ -29,7 +30,7 @@ public class Parser {
                     "발주기관\n"+ "조달방식\n"+ "유형\n"+ "공사명\n"+ "게시일시\n"+ "발주시기\n"+
                     "등록자\n"+ "고시공고번호\n" + "관서명\n"+ "계약명\n"+ "계약금액\n"+
                     "계약일\n"+ "계약대상자\n"+ "글번호\n"+ "입찰번호\n"+ "입찰정보\n"+
-                    "사업명\n"+ "부서명\n";
+                    "사업명\n"+ "부서명\n" + "계약\n";
     public static final int CODE_NOTYET=2, CODE_CANNOT_FIND=1, CODE_SUCCESS=0;
     private static final int TIMEOUT=10000;
     private int tableIndex=-1;
@@ -124,6 +125,8 @@ public class Parser {
                                 System.out.println(temp.get(j));
                             }
                         }
+                        if(temp.size()>articleCount) articleCount=temp.size();
+
                     }
                 }
             }
@@ -133,6 +136,18 @@ public class Parser {
             resultCode=CODE_CANNOT_FIND;
             return;
         }
+        System.out.println("category size: "+category.size());
+        System.out.println("articleCount: "+articleCount);
+
+        if(category.size()>articleCount){
+            System.out.println("쓰레기값 테스트");
+            int removeSize=category.size()-articleCount;
+            for(int k=0;k<removeSize;k++){
+                category.remove(0);
+            }
+        }
+        articleCount=0;
+
         printList();
     }
 
@@ -173,6 +188,7 @@ public class Parser {
         System.out.println(article.get(2).get(2));
         System.out.println(article.get(2).get(3));
         */
+        System.out.println("end");
     }
 
 }

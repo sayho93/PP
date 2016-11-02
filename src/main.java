@@ -11,7 +11,7 @@ import java.io.IOException;
  */
 public class main {
     public static void main(String[] args) throws IOException {
-        Parser parser=new Parser("http://www.gdc.or.kr/bidding");
+        Parser parser=new Parser("http://contract.usc.go.kr/order_schedule/all");
         parser.findLocation();
     }
 }
