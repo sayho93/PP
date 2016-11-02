@@ -11,7 +11,7 @@ import java.io.IOException;
  */
 public class main {
     public static void main(String[] args) throws IOException {
-        Parser parser=new Parser("http://www.naju.go.kr/www/administration/administration/contract");
+        Parser parser=new Parser("http://www.g2b.go.kr:8101/ep/adjust/instBidCdList.do?gigwanCode=Z003688&/");
         parser.findLocation();
     }
 }
