@@ -100,6 +100,7 @@ public class Parser {
                             //return;
                         }
                     }
+
                     int i=0;
                     for(Element td : trTags.select("td, th")){
                         if(!isArticleTable(td.text()) && !isPlace(td.text())){
@@ -116,6 +117,7 @@ public class Parser {
                                 if(aTemp.length() == 0) temp.add(tdTemp);
                                 //temp.add(tdTemp);
                             }
+
                             System.out.println("tdTemp:" + tdTemp +"length" +tdTemp.length());
                             System.out.println("aTemp:" + aTemp + "length"+aTemp.length());
                             //System.out.println(temp.get(i++));
@@ -128,8 +130,13 @@ public class Parser {
                         if(temp.size()>articleCount) articleCount=temp.size();
 
                     }
+
+                    temp.add(this.URL.substring(0, this.URL.indexOf("/", 8)) + trTags.select("a").attr("href"));
                 }
+
             }
+            articleCount++;
+            category.add("Link");
         }
         else {                                          //when table is empty
             System.out.println("No table");
@@ -145,6 +152,18 @@ public class Parser {
             for(int k=0;k<removeSize;k++){
                 category.remove(0);
             }
+        }
+
+        ArrayList tmpArr = new ArrayList();
+        for(int i=0;i<article.size();i++){
+            if(article.get(i).size() != articleCount) tmpArr.add(i);
+           // System.out.println(article.get(i).get(article.get(i).size()));
+        }
+
+        for(int i=0;i<tmpArr.size();i++){
+            System.out.println(tmpArr.get(i));
+            int tmp= (int)tmpArr.get(i);
+            article.remove(tmp-i);
         }
         articleCount=0;
 
@@ -173,7 +192,7 @@ public class Parser {
         {
             for(String s : arr)
             {
-                System.out.print(s + " ");
+                System.out.print("[" + s + " ]");
             }
             System.out.println("");
         }
