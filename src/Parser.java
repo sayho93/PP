@@ -198,7 +198,7 @@ public class Parser {
         {
             for(String s : arr)
             {
-                System.out.print("[" + s + " ]");
+                System.out.print(" [" + s + " ] ");
             }
             System.out.println("");
         }
