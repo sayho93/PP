@@ -93,10 +93,11 @@ public class Parser {
                             //ParseAndInsert(resultCode);            //tableIndex?
                             //System.out.println("resultCode: " + resultCode);
                             //System.out.println("tableIndex: " + tableIndex);
-                            if (trTags.text().trim().length() != 0)
+                            if (trTags.text().trim().length() != 0) {
                                 //System.out.println(trTags.text() + " :: " + trTags.select("a").attr("href"));
+                                if(th.text().contains("첨부파일") || th.text().contains("파일") || th.text().contains("첨부") || th.text().contains("링크")) continue;
                                 category.add(th.text());
-
+                            }
                             //return;
                         }
                     }
@@ -127,7 +128,7 @@ public class Parser {
                                 System.out.println(temp.get(j));
                             }
                         }
-                        if(temp.size()>articleCount) articleCount=temp.size();
+                        if(temp.size()>articleCount && temp.size()<=category.size()) articleCount=temp.size();
 
                     }
                     String raw = this.URL.substring(0, this.URL.indexOf("/", 8)) + trTags.select("a").attr("href");
@@ -146,8 +147,12 @@ public class Parser {
         }
         System.out.println("category size: "+category.size());
         System.out.println("articleCount: "+articleCount);
-
-        if(category.size()>articleCount){
+        /*
+        for(String cat:category){
+            if(cat.contains("첨부파일")) category.remove(cat);
+        }
+        */
+        if(category.size()>articleCount && articleCount!=1){
             System.out.println("쓰레기값 테스트");
             int removeSize=category.size()-articleCount;
             for(int k=0;k<removeSize;k++){
@@ -185,7 +190,7 @@ public class Parser {
     private void printList(){
         System.out.println("category table");
         for( String node:category){
-            System.out.print(node + " ");
+            System.out.print(" [ "+node + " ] ");
         }
         System.out.println(" ");
         System.out.println("articletable");

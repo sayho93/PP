@@ -4,6 +4,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import javax.net.ssl.SSLHandshakeException;
 import java.io.IOException;
 
 /**
@@ -11,7 +12,10 @@ import java.io.IOException;
  */
 public class main {
     public static void main(String[] args) throws IOException {
-        Parser parser=new Parser("http://www.g2b.go.kr:8101/ep/adjust/instBidCdList.do?gigwanCode=Z003688&/");
+        Parser parser=new Parser("http://g.hanayo.net/main.htm?gcode=jindo&type=bid&btype=");
+        try{
         parser.findLocation();
+        }
+        catch (SSLHandshakeException e){}
     }
 }
