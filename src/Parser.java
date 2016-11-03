@@ -16,6 +16,8 @@ public class Parser {
     private String name="";
     private Document document;
     private int articleCount=0;
+    private int colspan=0;
+    private int removeIndex;
     private static String COMPAREDATA=
             "업무공고\n" + "번호\n" + "공고명\n" + "공고기관\n" + "계약방법\n" + "입찰방법\n" +
                     "입찰서\n" + "마감일시\n" + "번호\n" + "제목\n" + "내용\n" + "담당부서\n" +
@@ -30,7 +32,7 @@ public class Parser {
                     "발주기관\n"+ "조달방식\n"+ "유형\n"+ "공사명\n"+ "게시일시\n"+ "발주시기\n"+
                     "등록자\n"+ "고시공고번호\n" + "관서명\n"+ "계약명\n"+ "계약금액\n"+
                     "계약일\n"+ "계약대상자\n"+ "글번호\n"+ "입찰번호\n"+ "입찰정보\n"+
-                    "사업명\n"+ "부서명\n" + "계약\n"+ "입찰서마감일시\n";
+                    "사업명\n"+ "부서명\n" + "계약\n"+ "입찰서마감일시\n" + "기초금액\n";
     public static final int CODE_NOTYET=2, CODE_CANNOT_FIND=1, CODE_SUCCESS=0;
     private static final int TIMEOUT=10000;
     private int tableIndex=-1;
@@ -96,8 +98,16 @@ public class Parser {
                             if (trTags.text().trim().length() != 0) {
                                 //System.out.println(trTags.text() + " :: " + trTags.select("a").attr("href"));
                                 if(th.text().contains("첨부파일") || th.text().contains("파일") || th.text().contains("첨부") || th.text().contains("링크") || th.text().contains("결과")) continue;
+
                                 if(!th.select("img").isEmpty()) continue;
+
                                 category.add(th.text());
+                                if(!th.attr("colspan").isEmpty()) {
+                                    colspan=Integer.parseInt(th.attr("colspan"));
+                                    removeIndex=category.indexOf(th.text());
+                                    System.out.println(colspan + "    " + category.indexOf(th.text()) + " " + th.text());
+                                    category.remove(th.text());
+                                }
                             }
                             //return;
                         }
@@ -161,17 +171,34 @@ public class Parser {
             }
         }
 
+
+
+
+        if(colspan != 0){
+            for(int i=1;i<article.size()-5;i++){
+                for(int j=0;j<colspan;j++) {
+                    System.out.println(i + " " + removeIndex);
+                    if(article.get(i).size() >= category.size())article.get(i).remove(removeIndex);
+
+                }
+            }
+        }
+
         ArrayList tmpArr = new ArrayList();
         for(int i=0;i<article.size();i++){
             if(article.get(i).size() != articleCount) tmpArr.add(i);
             // System.out.println(article.get(i).get(article.get(i).size()));
         }
 
+
+
         for(int i=0;i<tmpArr.size();i++){
             System.out.println(tmpArr.get(i));
             int tmp= (int)tmpArr.get(i);
             article.remove(tmp-i);
         }
+
+
         articleCount=0;
 
         printList();
@@ -191,7 +218,7 @@ public class Parser {
     private void printList(){
         System.out.println("category table");
         for( String node:category){
-            System.out.print(" [ "+node + " ] ");
+            System.out.print(" [ " +node + " ] ");
         }
         System.out.println(" ");
         System.out.println("articletable");
