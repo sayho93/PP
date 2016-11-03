@@ -95,7 +95,8 @@ public class Parser {
                             //System.out.println("tableIndex: " + tableIndex);
                             if (trTags.text().trim().length() != 0) {
                                 //System.out.println(trTags.text() + " :: " + trTags.select("a").attr("href"));
-                                if(th.text().contains("첨부파일") || th.text().contains("파일") || th.text().contains("첨부") || th.text().contains("링크")) continue;
+                                if(th.text().contains("첨부파일") || th.text().contains("파일") || th.text().contains("첨부") || th.text().contains("링크") || th.text().contains("결과")) continue;
+                                if(!th.select("img").isEmpty()) continue;
                                 category.add(th.text());
                             }
                             //return;
@@ -163,7 +164,7 @@ public class Parser {
         ArrayList tmpArr = new ArrayList();
         for(int i=0;i<article.size();i++){
             if(article.get(i).size() != articleCount) tmpArr.add(i);
-           // System.out.println(article.get(i).get(article.get(i).size()));
+            // System.out.println(article.get(i).get(article.get(i).size()));
         }
 
         for(int i=0;i<tmpArr.size();i++){
@@ -198,7 +199,7 @@ public class Parser {
         {
             for(String s : arr)
             {
-                System.out.print(" [" + s + " ] ");
+                System.out.print("[" + s + " ]");
             }
             System.out.println("");
         }

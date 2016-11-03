@@ -12,9 +12,9 @@ import java.io.IOException;
  */
 public class main {
     public static void main(String[] args) throws IOException {
-        Parser parser=new Parser("http://g.hanayo.net/main.htm?gcode=dangjin&type=bid&btype=");
+        Parser parser=new Parser("http://www.inje.go.kr/portal/multiboard/board/list.htm?menu=MN20364&groupno=116");
         try{
-        parser.findLocation();
+            parser.findLocation();
         }
         catch (SSLHandshakeException e){}
     }
