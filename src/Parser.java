@@ -57,7 +57,7 @@ public class Parser {
     }
 
     private boolean isPlace(String msg){
-        if(msg.replaceAll(" ", "").contains("경상북도")) return true;
+        //if(msg.replaceAll(" ", "").contains("경상북도")) return true;
         return false;
     }
 

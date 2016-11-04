@@ -12,7 +12,7 @@ import java.io.IOException;
  */
 public class main {
     public static void main(String[] args) throws IOException {
-        Parser parser=new Parser("http://www.hanayo.net/jds/wbid/wbid.php3?gov=%BC%F8%C3%B5%BD%C3%C3%BB");
+        Parser parser=new Parser("http://g.hanayo.net/main.htm?gcode=gangjin&btype=&type=rslt?anc_code=4920000&channel=4920000&menu_code=PP001");
         try{
             parser.findLocation();
         }
