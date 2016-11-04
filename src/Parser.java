@@ -204,6 +204,36 @@ public class Parser {
         printList();
     }
 
+    public void finderForEminwon() throws IOException {
+        this.document=Jsoup.connect(URL)                //connect
+                .followRedirects(true)
+                .method(Connection.Method.POST)
+                .timeout(TIMEOUT)
+                .get();
+
+        Elements title = document.select("title");
+        this.name=title.text();
+        System.out.println("name: "+name);
+        Elements header=document.select("thead");
+        for(Element trTags: header.select("tr")){
+            for(Element cat: trTags.select("th")){
+                category.add(cat.text());
+            }
+        }
+
+        Elements tables=document.select("table");
+        Elements body=tables.select("tbody");
+        //Elements body=document.select("tbody");
+        for(Element trTags: body.select("tr")){
+            ArrayList<String> temp = new ArrayList<>();
+            article.add(temp);
+            for(Element tdTags: trTags.select("td")){
+                temp.add(tdTags.text());
+            }
+        }
+        printList();
+    }
+
     private void ParseAndInsert(int ColumnCount){
         setBoardTable();
         setColumnCount(ColumnCount);
@@ -226,7 +256,7 @@ public class Parser {
         {
             for(String s : arr)
             {
-                System.out.print("[" + s + " ]");
+                System.out.print("[ " + s + " ] ");
             }
             System.out.println("");
         }

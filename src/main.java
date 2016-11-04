@@ -12,9 +12,14 @@ import java.io.IOException;
  */
 public class main {
     public static void main(String[] args) throws IOException {
-        Parser parser=new Parser("http://g.hanayo.net/main.htm?gcode=gangjin&btype=&type=rslt?anc_code=4920000&channel=4920000&menu_code=PP001");
+        Parser parser=new Parser("http://eminwon.seongnam.go.kr/emwp/jsp/ofr/OfrNotAncmtLSub.jsp?not_ancmt_se_code=02");
         try{
-            parser.findLocation();
+            if(parser.getURL().contains("eminwon")){
+                parser.finderForEminwon();
+            }
+            else{
+                parser.findLocation();
+            }
         }
         catch (SSLHandshakeException e){}
     }
