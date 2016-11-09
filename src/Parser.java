@@ -33,7 +33,9 @@ public class Parser {
                     "발주기관\n"+ "조달방식\n"+ "유형\n"+ "공사명\n"+ "게시일시\n"+ "발주시기\n"+
                     "등록자\n"+ "고시공고번호\n" + "관서명\n"+ "계약명\n"+ "계약금액\n"+
                     "계약일\n"+ "계약대상자\n"+ "글번호\n"+ "입찰번호\n"+ "입찰정보\n"+
-                    "사업명\n"+ "부서명\n" + "계약\n"+ "입찰서마감일시\n" + "기초금액\n";
+                    "사업명\n"+ "부서명\n" + "계약\n"+ "입찰서마감일시\n" + "기초금액\n"+"개찰일시\n"+
+                    "낙찰예정자\n"+"투찰금액(원)\n"+"투찰률(%)\n"+"참가수\n" +"재입찰번호\n"+"입찰분류\n" +
+                    "진행사항\n" + "진행상황\n";
     public static final int CODE_NOTYET=2, CODE_CANNOT_FIND=1, CODE_SUCCESS=0;
     private static final int TIMEOUT=10000;
     private int tableIndex=-1;
@@ -94,15 +96,15 @@ public class Parser {
                         if (isArticleTable(th.text()) && !isPlace(th.text())) {
                             resultCode = CODE_SUCCESS;
                             //ParseAndInsert(resultCode);            //tableIndex?
-                            //System.out.println("resultCode: " + resultCode);
-                            //System.out.println("tableIndex: " + tableIndex);
-                            if (trTags.text().trim().length() != 0) {
-                                //System.out.println(trTags.text() + " :: " + trTags.select("a").attr("href"));
-                                if(th.text().contains("첨부파일") || th.text().contains("파일") || th.text().contains("첨부") || th.text().contains("링크") || th.text().contains("결과")) continue;
+                                //System.out.println("resultCode: " + resultCode);
+                                //System.out.println("tableIndex: " + tableIndex);
+                                if (trTags.text().trim().length() != 0) {
+                                    //System.out.println(trTags.text() + " :: " + trTags.select("a").attr("href"));
+                                    if(th.text().contains("첨부파일") || th.text().contains("파일") || th.text().contains("첨부") || th.text().contains("링크") || th.text().contains("결과")) continue;
 
-                                if(!th.select("img").isEmpty()) continue;
+                                    if(!th.select("img").isEmpty()) continue;
 
-                                category.add(th.text());
+                                    category.add(th.text());
                                 if(!th.attr("colspan").isEmpty()) {
                                     colspan=Integer.parseInt(th.attr("colspan"));
                                     removeIndex=category.indexOf(th.text());
